@@ -2,4 +2,4 @@ name = "John Smith"
 age = 20
 newPatient = True
 
-print(age)
+print("Hello" + name + "!")

@@ -1,10 +1,11 @@
-def greet(fName, lName):
-    return "Hello, " + fName + " " + lName + "!"
-
-inputFName = input("Enter your first name: ")
-inputLName = input("Enter your last name: ")
-message = greet(inputFName, inputLName)
-print(message)
-
-file = open("output.txt", "w")
-file.write(message)
+def fizz_buzz(number):
+    if() (number % 3 == 0) and (number % 5 == 0):
+        return 'FizzBuzz'
+    if number % 3 == 0:
+        return 'Fizz'
+    if number % 5 == 0:
+        return 'Buzz'
+    return number
+    
+number = int(input('Enter a number: '))
+print(fizz_buzz(number))

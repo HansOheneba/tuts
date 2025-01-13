@@ -1,7 +1,10 @@
 def greet(fName, lName):
-    print("Hello, " + fName + " " + lName + "!")
-    print("Welcome to the world of Python!")
+    return "Hello, " + fName + " " + lName + "!"
 
 inputFName = input("Enter your first name: ")
 inputLName = input("Enter your last name: ")
-greet(inputFName, inputLName)
+message = greet(inputFName, inputLName)
+print(message)
+
+file = open("output.txt", "w")
+file.write(message)

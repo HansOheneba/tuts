@@ -1,9 +1,14 @@
-num1 = float(input("Enter the first number: "))
-num2 = float(input("Enter the second number: "))
+weight = float(input("Enter your weight: "))
 
-sum = num1 + num2
+unit = input("enter unit (Pound L(bs) 'l' or Kilogram K(g) 'k'): ")
 
-print("The sum of the two numbers= " + str(sum) + "!")
-
-if sum > 100:
-    print("Wow! That's a big number!")
+if unit.upper() == 'L':
+    converted = weight * 0.45
+    print("Your weight in Kilogram is" + str(converted) + "kg")
+    
+elif unit.upper() == 'K':
+    converted = weight // 0.45
+    print("Your weight in Pound is " + str(converted) + "lbs")
+    
+else:
+    print("Invalid input, please enter 'l' or 'k'")

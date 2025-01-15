@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 # File to store expenses
 file_name = "expenses.csv"
@@ -40,6 +41,37 @@ def calculate_total():
     print(f"\nTotal Expenses: ${total:.2f}")
 
 
+def plot_expenses():
+    dates = []
+    amounts = []
+
+    with open(file_name, "r") as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip the header row
+        for row in reader:
+            dates.append(datetime.strptime(row[0], "%Y-%m-%d"))
+            amounts.append(float(row[2]))
+
+    if not dates or not amounts:
+        print("\nNo expenses to plot!")
+        return
+
+    # Sort dates and amounts for proper plotting
+    sorted_data = sorted(zip(dates, amounts))
+    dates, amounts = zip(*sorted_data)
+
+    # Plotting the graph
+    plt.figure(figsize=(10, 5))
+    plt.plot(dates, amounts, marker="o", linestyle="-", color="b")
+    plt.title("Expenses Over Time")
+    plt.xlabel("Date")
+    plt.ylabel("Amount")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.xticks(rotation=45)
+    plt.show()
+
+
 # Menu
 def menu():
     while True:
@@ -47,7 +79,8 @@ def menu():
         print("1. Add Expense")
         print("2. View Expenses")
         print("3. Calculate Total")
-        print("4. Exit")
+        print("4. Plot Expenses")
+        print("5. Exit")
 
         choice = input("Enter your choice: ")
         if choice == "1":
@@ -57,6 +90,8 @@ def menu():
         elif choice == "3":
             calculate_total()
         elif choice == "4":
+            plot_expenses()
+        elif choice == "5":
             print("Goodbye!")
             break
         else:

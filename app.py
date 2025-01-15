@@ -1,58 +1,73 @@
+import csv
+from datetime import datetime
 
-try:
-    with open("guest_list.txt", "r") as file:
-        guests = [line.strip() for line in file.readlines()]
-    print("Guest list loaded successfully.")
-except FileNotFoundError:
-    guests = [] 
-    print("No guest list file found. Starting with an empty list.")
+# File to store expenses
+file_name = "expenses.csv"
 
-quit = False
 
-while not quit:
-    print(
-        "\nWelcome to the guest manager!\n"
-        "1. Add a guest\n"
-        "2. Remove a guest\n"
-        "3. List all guests\n"
-        "4. Search for a guest\n"
-        "5. Save and quit\n"
-    )
+# Function to add an expense
+def add_expense():
+    amount = float(input("Enter expense amount: "))
+    category = input("Enter category (e.g., Food, Transport): ")
+    date = input(
+        "Enter date (YYYY-MM-DD, leave blank for today): "
+    ) or datetime.now().strftime("%Y-%m-%d")
 
-    choice = input("What would you like to do? ")
+    with open(file_name, "a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([date, category, amount])
+    print("Expense added!")
 
-    if choice == "1":
-        name = input("What is the guest's full name? ").strip()
-        guests.append(name)
-        print(name + " has been added.")
-    elif choice == "2":
-        name = input("What is the guest's full name? ").strip()
-        if name in guests:
-            guests.remove(name)
-            print(name + " has been removed.")
+
+# Function to view all expenses
+def view_expenses():
+    print("\nDate       | Category       | Amount")
+    print("-" * 30)
+    with open(file_name, "r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            print(f"{row[0]:<10} | {row[1]:<13} | ${row[2]:>7}")
+
+
+# Function to calculate total expenses
+def calculate_total():
+    total = 0
+    with open(file_name, "r") as file:
+        reader = csv.reader(file)
+        next(reader)
+        for row in reader:
+            total += float(row[2])
+    print(f"\nTotal Expenses: ${total:.2f}")
+
+
+# Menu
+def menu():
+    while True:
+        print("\n--- Expense Tracker ---")
+        print("1. Add Expense")
+        print("2. View Expenses")
+        print("3. Calculate Total")
+        print("4. Exit")
+
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            add_expense()
+        elif choice == "2":
+            view_expenses()
+        elif choice == "3":
+            calculate_total()
+        elif choice == "4":
+            print("Goodbye!")
+            break
         else:
-            print(name + " is not in the guest list.")
-    elif choice == "3":
-        if not guests:
-            print("There are no guests yet, you need to add some.\n")
-        else:
-            print("Guest List:")
-            for guest in guests:
-                print(guest)
-    elif choice == "4":
-        name = input("What is the guest's first or last name? ").strip().lower()
-        found = False
-        for guest in guests:
-            if name in guest.lower():
-                print(guest)
-                found = True
-        if not found:
-            print("No guests found with that name.")
-    elif choice == "5":
-        print("Saving guest list and exiting the guest manager...")
-        with open("guest_list.txt", "w") as file:
-            for guest in guests:
-                file.write(guest + "\n")
-        quit = True
-    else:
-        print("Invalid choice. Please try again.")
+            print("Invalid choice. Please try again.")
+
+
+# Initialize file
+with open(file_name, "a", newline="") as file:
+    writer = csv.writer(file)
+    if file.tell() == 0:  # If file is empty, add headers
+        writer.writerow(["Date", "Category", "Amount"])
+
+# Start the program
+menu()
